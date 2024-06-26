@@ -52,7 +52,6 @@ function App() {
       closeEditBox();
     }
   };
-
   const handleComplete = (index, event) => {
     const completedTodo = todos[index];
     if (event.target.checked) {
@@ -64,20 +63,17 @@ function App() {
       setCompletedTodos(updatedCompletedTodos);
     }
   };
-
   const deleteTodo = (index) => {
     if (window.confirm("Do you want to delete it?")) {
       const updatedTodos = todos.filter((_, i) => i !== index);
       setTodos(updatedTodos);
 
-
-      if (completedTodos) {
-        const completedTodo = todos[index];
-        const updatedCompletedTodos = completedTodos.filter(
-          (todo) => todo !== completedTodo
-        );
-        setCompletedTodos(updatedCompletedTodos);
-      }
+      // Delete the corresponding completed todo if it exists
+      const completedTodo = todos[index];
+      const updatedCompletedTodos = completedTodos.filter(
+        (todo) => todo !== completedTodo
+      );
+      setCompletedTodos(updatedCompletedTodos);
     }
   };
 
@@ -89,26 +85,32 @@ function App() {
 
   return (
     <>
-      <main className="mx-10 flex flex-col justify-center items-center gap-3 min-h-[100vh] h-[100%]">
-        <section className="bg-sky-800 px-8 py-20 rounded-lg backdrop-blur-lg relative">
+      <main className="mx-10 flex flex-col justify-center items-center gap-3 min-h-[100vh] h-[100%] box-border ">
+        <section
+          id="completedTodos"
+          className="flex text-3xl justify-between items-center w-[250px] p-5  sm:w-[400px] border-2 rounded-lg"
+        >
+          <h2>Task Completed</h2>
+          <div className="bg-sky-800 text-white p-10 rounded-[50%]">
+            {completedTodos.length}/{todos.length}
+          </div>
+        </section>
+        <section className="bg-sky-800 p-3 py-16 rounded-lg backdrop-blur-lg relative w-[250px] sm:w-[400px]">
           <h1 className="text-center text-4xl font-bold text-white">
             Todo App
           </h1>
-          <form
-            onSubmit={handleSubmit}
-            className="w-[250px] sm:w-[400px] mt-8 text-2xl"
-          >
+          <form onSubmit={handleSubmit} className="w-[100%] mt-8 text-2xl">
             <div className="todo_list flex gap-3">
               <input
                 type="text"
-                placeholder="Add Todo..."
+                placeholder="Write your task here..."
                 name="input"
-                className="bg-gray-300 p-3 rounded-md w-full focus:ring-2 ring-gray-300 border-none outline-none"
+                className="bg-gray-300 p-3 rounded-md w-full focus:ring-2 placeholder:text-gray-600 ring-gray-300 border-none outline-none"
               />
               <input
                 type="submit"
-                value="Add"
-                className="bg-gray-300 p-3  rounded-md active:ring-2 ring-gray-300 ring-offset-2"
+                value="+"
+                className="bg-gray-300 p-3 text-4xl  rounded-md active:ring-2 ring-gray-300 ring-offset-2"
               />
             </div>
           </form>
@@ -118,7 +120,7 @@ function App() {
                 <li
                   key={index}
                   id="todo_item"
-                  className={`bg-blue-300 p-3 w-[250px] sm:w-[400px] my-3 rounded-md flex justify-between ${
+                  className={`bg-blue-300 p-3 w-[100%] my-3 rounded-md flex justify-between ${
                     completedTodos.includes(todos[index]) ? "completed" : ""
                   } `}
                 >
@@ -149,7 +151,7 @@ function App() {
             </ul>
           </div>
           <div
-            className="bg-sky-800 w-[100%] h-[100%] opacity-[96%] shadow-lg shadow-current absolute top-0 left-0 rounded-md flex-col items-center justify-center"
+            className="bg-sky-800 w-[100%] p-3 h-[100%] opacity-[96%] shadow-lg shadow-current absolute top-0 left-0 rounded-md flex-col items-center justify-center"
             id="editWindow"
             ref={editWindowRef}
             style={{ display: "none" }}
@@ -166,7 +168,7 @@ function App() {
                 id="editedTodo"
                 onChange={handleEditChange}
                 value={editTodos}
-                className="bg-blue-300 p-3 my-3 rounded-md w-[250px] sm:w-[400px] focus:ring-2 text-xl ring-gray-300 border-none outline-none"
+                className="bg-gray-300 p-3 my-3 rounded-md w-[100%] focus:ring-2 text-xl ring-gray-300 border-none outline-none"
               />
               <input
                 type="submit"
